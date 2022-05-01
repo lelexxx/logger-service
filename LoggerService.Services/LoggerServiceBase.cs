@@ -24,4 +24,17 @@ public class LoggerServiceBase : ILoggerService
             throw;
         }
     }
+
+    public async ValueTask<TResult?> ExecuteAsync<TResult>(Func<ValueTask<TResult?>> method)
+    {
+        try
+        {
+            return await method().ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Exception non gérée");
+            throw;
+        }
+    }
 }
